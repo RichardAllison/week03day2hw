@@ -56,10 +56,10 @@ class BountyHunter
     db.close()
   end
 
-  def find
+  def self.find(id)
     db = PG.connect({dbname: 'bounty_hunters', host: 'localhost'})
     sql = "SELECT * FROM bounty_hunters WHERE id=$1"
-    values = [@id]
+    values = [id]
     db.prepare("find", sql)
     hunters = db.exec_prepared("find", values)
     db.close()

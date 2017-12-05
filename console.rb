@@ -22,7 +22,7 @@ bounty_hunter2.save()
 bounty_hunter1.name = ("Trevor Fett")
 bounty_hunter1.update
 
-p bounty_hunter2.find
+p BountyHunter.find('12')
 
 bounty_hunter1.delete
 
