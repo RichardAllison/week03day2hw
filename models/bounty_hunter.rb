@@ -1,6 +1,6 @@
 require ('pg')
 
-class Bounty
+class BountyHunter
 
   attr_accessor :name, :species, :weapon, :bounty_value
   attr_reader :id
@@ -20,9 +20,7 @@ class Bounty
       VALUES
       ($1, $2, $3, $4)
       RETURNING *"
-
     values = [@name, @species, @weapon, @bounty_value]
-
     db.prepare("save", sql)
     @id = db.exec_prepared("save", values)[0]['id'].to_i
     db.close()
@@ -44,10 +42,17 @@ class Bounty
   def delete
     db = PG.connect({dbname: 'bounty_hunters', host: 'localhost'})
     sql = "DELETE FROM bounty_hunters WHERE id = $1"
-
     values = [@id]
     db.prepare("delete", sql)
     db.exec_prepared("delete", values)
+    db.close()
+  end
+
+  def self.delete_all
+    db = PG.connect({dbname: 'bounty_hunters', host: 'localhost'})
+    sql = "DELETE FROM bounty_hunters"
+    db.prepare("delete_all", sql)
+    db.exec_prepared("delete_all")
     db.close()
   end
 
@@ -58,7 +63,7 @@ class Bounty
     db.prepare("find", sql)
     hunters = db.exec_prepared("find", values)
     db.close()
-    return hunters.map {|hunter| Bounty.new(hunter)}
+    return hunters.map {|hunter| BountyHunter.new(hunter)}
   end
 
 end
